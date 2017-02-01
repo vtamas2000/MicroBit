@@ -2,6 +2,7 @@ from microbit import *
 import random
 
 currentPos = [0, 0] #Column, Row
+targetPos = [4, 4] #Column, Row
 
 def move(way):
 
@@ -11,27 +12,20 @@ def move(way):
         sleep(1000)
         if currentPos[1] == -1:
             currentPos[1] = 4
-        display.clear()
 
     if way == 1:
         display.set_pixel(currentPos[0], currentPos[1], 9)
-        if prevPos[0] != currentPos[0]:
-            prevPos[0] = currentPos[0]
         currentPos[0] = currentPos[0] + 1
         sleep(1000)
         if currentPos[0] == 5:
             currentPos[0] = 0
-        #display.set_pixel(prevPos[0], prevPos[1], 0)
-        display.clear()
-        #return True
 
     if way == 2:
         display.set_pixel(currentPos[0], currentPos[1], 9)
         currentPos[1] = currentPos[1] + 1
         sleep(1000)
         if currentPos[1] == 5:
-            currentPos[1] = 0       
-        display.clear()       
+            currentPos[1] = 0           
 
     if way == 3:
         display.set_pixel(currentPos[0], currentPos[1], 9)
@@ -39,7 +33,6 @@ def move(way):
         sleep(1000)
         if currentPos[0] == -1:
             currentPos[0] = 4
-        display.clear()
 
 
 def player_move():
@@ -52,6 +45,17 @@ def player_move():
         
         pamacs = (pamacs + right_presses - left_presses) % 4 
         move(pamacs)
+        display.clear()
+        display.set_pixel(targetPos[0], targetPos[1], 4)
+        if targetPos[0] == currentPos[0] and targetPos[1] == currentPos[1]:
+            place_target()
+
+
+def place_target():
+    posX = random.randint(0, 4)
+    posY = random.randint(0, 4)
+    targetPos[0] = posX
+    targetPos[1] = posY
         
 
 while True:
