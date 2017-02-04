@@ -1,42 +1,62 @@
 from microbit import *
 import random
 
-currentPos = [0, 0] #Column, Row
+currentPosX = [0] #Column
+currentPosY = [0] #Row
+posHelpX = [0]
+posHelpY = [0]
 targetPos = [4, 4] #Column, Row
+
 
 def move(way):
 
     if way == 0:
-        display.set_pixel(currentPos[0], currentPos[1], 9)
-        currentPos[1] = currentPos[1] - 1
+        
+        for i in range(0, len(currentPosX), 1):
+            isNotDone = True
+            display.set_pixel(currentPosX[i], currentPosY[i], 9)
+            if isNotDone:
+                currentPosY[0] = currentPosY[0] - 1
+                isNotDone = False
+                sleep(1000)
+            if i > 0:
+                currentPosX[i] = currentPosX[i - 1]
+                currentPosY[i] = currentPosY[i - 1]
+            if currentPosY[i] == -1:
+                currentPosY[i] = 4
+        
+        
+        """display.set_pixel(currentPosX[0], currentPosY[0], 9)
+        currentPosY[0] = currentPosY[0] - 1
         sleep(1000)
-        if currentPos[1] == -1:
-            currentPos[1] = 4
+        if currentPosY[0] == -1:
+            currentPosY[0] = 4"""
 
     if way == 1:
-        display.set_pixel(currentPos[0], currentPos[1], 9)
-        currentPos[0] = currentPos[0] + 1
+        display.set_pixel(currentPosX[0], currentPosY[0], 9)
+        currentPosX[0] = currentPosX[0] + 1
         sleep(1000)
-        if currentPos[0] == 5:
-            currentPos[0] = 0
+        if currentPosX[0] == 5:
+            currentPosX[0] = 0
 
     if way == 2:
-        display.set_pixel(currentPos[0], currentPos[1], 9)
-        currentPos[1] = currentPos[1] + 1
+        display.set_pixel(currentPosX[0], currentPosY[0], 9)
+        currentPosY[0] = currentPosY[0] + 1
         sleep(1000)
-        if currentPos[1] == 5:
-            currentPos[1] = 0           
+        if currentPosY[0] == 5:
+            currentPosY[0] = 0           
 
     if way == 3:
-        display.set_pixel(currentPos[0], currentPos[1], 9)
-        currentPos[0] = currentPos[0] - 1
+        display.set_pixel(currentPosX[0], currentPosY[0], 9)
+        currentPosX[0] = currentPosX[0] - 1
         sleep(1000)
-        if currentPos[0] == -1:
-            currentPos[0] = 4
+        if currentPosX[0] == -1:
+            currentPosX[0] = 4
 
 
 def player_move():
     pamacs = 0
+    score = 0
     while True:
         right_presses = button_b.get_presses()
         left_presses = button_a.get_presses()
@@ -47,8 +67,10 @@ def player_move():
         move(pamacs)
         display.clear()
         display.set_pixel(targetPos[0], targetPos[1], 4)
-        if targetPos[0] == currentPos[0] and targetPos[1] == currentPos[1]:
+        if targetPos[0] == currentPosX[0] and targetPos[1] == currentPosY[0]:
             place_target()
+            score = score + 1
+            player_growth()
 
 
 def place_target():
@@ -56,6 +78,13 @@ def place_target():
     posY = random.randint(0, 4)
     targetPos[0] = posX
     targetPos[1] = posY
+    
+def player_growth():
+    currentPosX.insert(len(currentPosX), currentPosX[len(currentPosX) - 1])
+    currentPosY.insert(len(currentPosY), currentPosY[len(currentPosY) - 1])
+
+def positioning_help():
+    
         
 
 while True:
